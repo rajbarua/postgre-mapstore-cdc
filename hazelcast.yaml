@@ -1,13 +1,10 @@
 hazelcast:
-  # cp-subsystem:
-  #   session-time-to-live-seconds: 60
-  #   missing-cp-member-auto-removal-seconds: 60
-  #   cp-member-count: 3
-  #   group-size: 3
   management-center:
     console-enabled: true
   jet:
     enabled: true
+  user-code-namespaces:
+   enabled: true
   map:
     dashboard:
       map-store:
@@ -15,8 +12,10 @@ hazelcast:
         class-name: com.hazelcast.mapstore.GenericMapStore 
         initial-mode: EAGER
         properties:
-            data-connection-ref: postgresql-database
-            id-column: reckey 
+          data-connection-ref: postgresql-database
+          id-column: reckey
+          #should match to DashboardSerializer.getTypeName or else will return GenericRecord
+          type-name: dashboard
   data-connection:
     postgresql-database:
       type: JDBC
