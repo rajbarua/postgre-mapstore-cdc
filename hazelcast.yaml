@@ -1,0 +1,27 @@
+hazelcast:
+  # cp-subsystem:
+  #   session-time-to-live-seconds: 60
+  #   missing-cp-member-auto-removal-seconds: 60
+  #   cp-member-count: 3
+  #   group-size: 3
+  management-center:
+    console-enabled: true
+  jet:
+    enabled: true
+  map:
+    dashboard:
+      map-store:
+        enabled: true
+        class-name: com.hazelcast.mapstore.GenericMapStore 
+        initial-mode: EAGER
+        properties:
+            data-connection-ref: postgresql-database
+            id-column: reckey 
+  data-connection:
+    postgresql-database:
+      type: JDBC
+      properties:
+        jdbcUrl: jdbc:postgresql://postgresql:5432/hazelcast
+        user: hazelcast 
+        password: hazelcast
+      shared: true

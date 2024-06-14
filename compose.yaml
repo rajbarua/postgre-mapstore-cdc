@@ -1,0 +1,55 @@
+services:
+  postgresql:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: hazelcast
+      POSTGRES_PASSWORD: hazelcast
+      POSTGRES_DB: hazelcast
+    #create a table and insert some data
+    volumes:
+      - "./init.sql:/docker-entrypoint-initdb.d/init.sql"
+      - ./postgres_db:/var/lib/postgresql/data
+    ports:
+      #expose to a different port on the host
+      - "5432:5432"
+  hz1:
+    image: hazelcast/hazelcast-enterprise:5.4.0
+    environment:
+      JAVA_OPTS: -Dhazelcast.config=/project/hazelcast.yaml
+      HZ_LICENSEKEY: ${HZ_LICENSEKEY}
+    volumes:
+      - ".:/project"
+    ports:
+      - "5701:5701"
+    depends_on:
+      - postgresql
+  hz2:
+    image: hazelcast/hazelcast-enterprise:5.4.0
+    environment:
+      JAVA_OPTS: -Dhazelcast.config=/project/hazelcast.yaml
+      HZ_LICENSEKEY: ${HZ_LICENSEKEY}
+    volumes:
+      - ".:/project"
+    depends_on:
+      - postgresql
+  hz3:
+    image: hazelcast/hazelcast-enterprise:5.4.0
+    environment:
+      JAVA_OPTS: -Dhazelcast.config=/project/hazelcast.yaml
+      HZ_LICENSEKEY: ${HZ_LICENSEKEY}
+    volumes:
+      - ".:/project"
+    depends_on:
+      - postgresql
+  mc:
+    image: hazelcast/management-center:5.4.0
+    environment:
+      MC_DEFAULT_CLUSTER: dev
+      MC_DEFAULT_CLUSTER_MEMBERS: hz1, hz2, hz3
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgresql
+volumes:
+  postgres_db:
+    driver: local
