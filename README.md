@@ -12,6 +12,4 @@ We will use auto mapping of Postgres table `dashboard` and Hazelcast map `dashbo
 1. We have configured `dashboard` map to load eagerly but it loads only when the map is called for the first time. You can do that via the `Client` class or using [Hazelcast CLC](https://docs.hazelcast.com/clc/latest/overview) and execute `clc -c dev map -n dashboard key-set`
 
 ### Java
-While the section above created a cache with low code but in order to query the cache in Java you can use either no-code Compact Seriraliation or custom Compact Serialization.
-Class `GenericClient` uses no-code Compact Serialization to query the cache.
-TODO: Add custom Compact Serialization example.
+While the section above created a cache with low code but in order to query the cache in Java you can use [Compact Seriraliation](https://docs.hazelcast.com/hazelcast/5.4/serialization/compact-serialization) to query the cache. See `CompactClient`

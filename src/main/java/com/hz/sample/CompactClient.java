@@ -8,16 +8,16 @@ import com.hz.sample.domain.Dashboard;
 import com.hz.sample.domain.DashboardSerializer;
 
 /**
- * Incomplete class.
- * Client that uses Compact Serialization
+ * The server config maps dashboard database table to Hazelcast IMap dashboard but this class uses compact serializer to retrieve the data.
  * https://docs.hazelcast.com/hazelcast/5.4/serialization/compact-serialization
+ * Please see documentation for other more efficient ways to register serializers.
  * 
  */
 public class CompactClient {
     public static void main(String[] args) {
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.getNetworkConfig().addAddress("127.0.0.1");
-        clientConfig.getSerializationConfig().getCompactSerializationConfig().addClass(DashboardSerializer.class);
+        clientConfig.getSerializationConfig().getCompactSerializationConfig().addSerializer(new DashboardSerializer());
     try{
             HazelcastInstance client = HazelcastClient.newHazelcastClient(clientConfig);
             IMap<Long, Dashboard> map = client.getMap("dashboard");
